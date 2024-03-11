@@ -1,6 +1,6 @@
 services:
   app:
     build: .
-    image: ghcr.io/username/repo:latest
+    image: ghcr.io/apoorva64/bg-remover/app:2c5a8a8ab40a324ec30a8b1b04fc28d1d2e12011
     ports:
       - "3000:3000"
