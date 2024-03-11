@@ -1,5 +1,6 @@
 services:
-  web:
+  app:
     build: .
+    image: ghcr.io/username/repo:latest
     ports:
       - "3000:3000"
