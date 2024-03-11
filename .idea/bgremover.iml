@@ -3,6 +3,10 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/ray-cluster/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/ray-cluster/venv/Lib" />
+      <excludeFolder url="file://$MODULE_DIR$/ray-cluster/venv/Scripts" />
+      <excludeFolder url="file://$MODULE_DIR$/ray-cluster/venv/share" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
     </content>

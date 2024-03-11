@@ -1,95 +1,94 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import * as React from 'react';
+import {useState} from 'react';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import ImageDropzone from '@/components/DropZOne';
+import Result from "@/components/Result";
+import Paper from "@mui/material/Paper";
+import Spinner from "@mui/material/CircularProgress";
 
+export const dynamic = 'force-dynamic' // defaults to auto
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    const [isLoading, setIsLoading] = useState(false);
+    const [images, setImages] = useState<string[]>([]);
+    return (
+        <Container maxWidth="lg"
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+                   sx={{
+                       display: 'flex',
+                       flexDirection: 'column',
+                       justifyContent: 'start',
+                       alignItems: 'center',
+                       width: '100vw',
+                       height: '100vh',
+                       p: 4,
+                   }}
+        > <Paper
+            elevation={3}
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'start',
+                alignItems: 'center',
+                width: '100%',
+                height: '100%',
+                p: 4,
+            }}
         >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+            <Typography variant="h2" sx={{mb: 5}}>
+                Background Removal
+            </Typography>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
+            <Container maxWidth="sm"
+                       sx={{
+                           display: 'flex',
+                           flexDirection: 'column',
+                           justifyContent: 'center',
+                           alignItems: 'center',
+                           width: '100%',
+                           height: '100%',
+                       }}
+            >
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+
+                {!isLoading ? (
+
+
+                    <ImageDropzone onDrop={
+                        async (acceptedFiles: File[]) => {
+                            setIsLoading(true);
+                            const formData = new FormData();
+                            for (const file of acceptedFiles) {
+                                formData.append('files', file);
+                            }
+                            const base64Images = await fetch('/api/upload/bgremove', {
+                                method: 'POST',
+                                body: formData,
+                            });
+
+                            // redirect to the result page
+                            const data = await base64Images.json();
+                            setImages(data.images);
+                            setIsLoading(false);
+                        }
+                    }/>
+                ) : (
+                    <Spinner/>
+                )}
+
+
+            </Container>
+            {images.length > 0 && (
+                <Box sx={{mb: 2}}>
+                    <Result images={images}/>
+                </Box>
+            )}
+        </Paper>
+
+        </Container>
+    );
 }
+
