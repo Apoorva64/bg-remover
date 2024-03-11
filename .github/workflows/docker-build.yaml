@@ -34,6 +34,5 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          file: ./api/Dockerfile
           push: true
           tags: ghcr.io/${{ steps.downcase.outputs.downcase }}/app:latest,ghcr.io/${{ steps.downcase.outputs.downcase }}/app:${{ github.sha }}
